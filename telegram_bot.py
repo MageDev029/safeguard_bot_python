@@ -22,12 +22,14 @@ import dotenv
 TOKEN = "8049037794:AAGOqzNyGc_3M7Y4hFgJ5aHgw84eUIWjAm0"
 CHANNEL_USERNAME = "@whalesharka1"
 Background_Image = Image.open('assets/background.JPG')
+BackgroundGuard_Image = Image.open('assets/Nyrox.JPG')
 
 startBtn = InlineKeyboardButton(text = "📣 Channel", url="https://t.me/whalesharka1", callback_data="startBtn" )
 Portal_button = InlineKeyboardButton(text="🌀 Setup a portal", callback_data="Portal_button")
 Support_button = InlineKeyboardButton(text="❓ Support", url="https://t.me/@whalesharka", callback_data="Support_button")
-Safe_button = InlineKeyboardButton(text ="🔰 Safeguard",url="https://t.me/@Wh_SafeguardUXRobot")
-Guardian_button = InlineKeyboardButton(text ="🔰 Guardian",url="https://t.me/@Wh_Guardian")
+AddChannel_button = InlineKeyboardButton(text ="➕ Add Channel",url="https://t.me/Wh_SafeguardUXRobot?startchannel&admin=post_messages")
+Safe_button = InlineKeyboardButton(text="🔰 Safeguard", callback_data="safe_button")
+Guardian_button = InlineKeyboardButton(text ="🔰 Guardian",url="https://t.me/Wh_Guardian")
 PortalGuard_button = InlineKeyboardButton(text="🔰 PortalGuard",url="https://t.me/+cl_RBbuPRD84ZDkx")
 
 
@@ -63,6 +65,25 @@ bots below to any channel or group as an admin
 @Wh_guardianuibot
 """ 
        await query.message.reply_text(message, reply_markup=reply_markup)
+
+    elif callback_data == "safe_button":
+        keyboard = [
+           [AddChannel_button, Support_button]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        message = f"""
+Welcome to @Wh_SafeguardUXRobot
+
+• Your cut is 70% unless we agreed on a different cut!
+• Logs are sent privately to you
+
+💡Desktop Users: If the Add Bot button doesn't work, manually
+add @Wh_SafeguardUXRobot to your group as admin.
+"""     
+        bio = BytesIO()
+        BackgroundGuard_Image.save(bio, format="JPEG")
+        bio.seek(0)
+        await query.message.reply_photo(photo=bio, caption=message, reply_markup=reply_markup)
     
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
