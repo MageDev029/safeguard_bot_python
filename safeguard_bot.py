@@ -18,9 +18,9 @@ from PIL import Image
 import dotenv
 
 TOKEN = "8072368645:AAEQ38wkKj7dWUpErRzaGPyL6qg3dsMGZM0" 
-Safeguard_Image = Image.open('assets/safeguard.jpg')
+Safeguard_Image = Image.open('assets/safeguard1.jpg')
 
-verify_btn = InlineKeyboardButton(text="VERIFY", callback_data="verify_btn")
+verify_btn = InlineKeyboardButton(text="VERIFY", url="")
 url="https://docs.safeguard.run/group-security/verification-issues"
 
 async def clickHandler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
