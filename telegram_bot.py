@@ -13,24 +13,28 @@ from telegram.ext import(
     MessageHandler,
     filters,
     CallbackQueryHandler,
+    CallbackContext,
+    ChatMemberHandler
 )
 from PIL import Image
 import dotenv
 
 
 
-TOKEN = "8049037794:AAGOqzNyGc_3M7Y4hFgJ5aHgw84eUIWjAm0"
-CHANNEL_USERNAME = "@whalesharka1"
+TOKEN = "7922710526:AAFiKsDMt_Rc18I0bFreWT32mCJvPTpTnVc"
+CHANNEL_USERNAME = "@whalesharka2"
 Background_Image = Image.open('assets/background.JPG')
 BackgroundGuard_Image = Image.open('assets/Nyrox.JPG')
 
-startBtn = InlineKeyboardButton(text = "📣 Channel", url="https://t.me/whalesharka1", callback_data="startBtn" )
+startBtn = InlineKeyboardButton(text = "📣 Channel", url="https://t.me/whalesharka2")
 Portal_button = InlineKeyboardButton(text="🌀 Setup a portal", callback_data="Portal_button")
 Support_button = InlineKeyboardButton(text="❓ Support", url="https://t.me/@whalesharka", callback_data="Support_button")
 AddChannel_button = InlineKeyboardButton(text ="➕ Add Channel",url="https://t.me/Wh_SafeguardUXRobot?startchannel&admin=post_messages")
+Dm_button = InlineKeyboardButton(text="💬 Open in DMs", callback_data="Dm_button")
+Popup_button = InlineKeyboardButton(text="📂 Open instantly", callback_data="Popup_button")
 Safe_button = InlineKeyboardButton(text="🔰 Safeguard", callback_data="safe_button")
 Guardian_button = InlineKeyboardButton(text ="🔰 Guardian",url="https://t.me/Wh_Guardian")
-PortalGuard_button = InlineKeyboardButton(text="🔰 PortalGuard",url="https://t.me/+cl_RBbuPRD84ZDkx")
+PortalGuard_button = InlineKeyboardButton(text="🔰 PortalGuard",url="https://t.me/+2Rs_H9JI3VI5ZWYx")
 
 
 async def is_user_subscribed(user_id:int, context:ContextTypes.DEFAULT_TYPE) -> bool:
@@ -41,14 +45,34 @@ async def is_user_subscribed(user_id:int, context:ContextTypes.DEFAULT_TYPE) -> 
         print(e)
         return False
 
+async def handle_channel_addition(update: Update, context: CallbackContext) -> dict:
+    try:
+        print("Full Update", update)
+        if update.my_chat_member and update.my_chat_member.new_chat_member:
+            print("Update.my_chat_member.new_chat_member", update.my_chat_member.new_chat_member)
+            new_chat = update.my_chat_member.new_chat_member     
+            channel_details = {
+            #  "channel_name": new_chat.title,
+            #  "ID": new_chat.id,
+            #  "Type": new_chat.type,
+            "channel_name": "Whalesharka",
+            "ID": 1001920119450,
+            "Type": "channel",
+            }
+        return channel_details
+    except Exception as e:
+        print(f"Error processing channel addition: {e}")
+        return {}
+
 async def clickHandler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handle the button click."""
     print("clickHandler")
     query = update.callback_query
+    print("call_back query",query)
     await query.answer() 
     # Extract the callback data from the clicked button
     callback_data = query.data
-    
+
     if callback_data == "Portal_button":
        keyboard = [
            [Safe_button],[PortalGuard_button, Guardian_button]
@@ -68,27 +92,41 @@ bots below to any channel or group as an admin
 
     elif callback_data == "safe_button":
         keyboard = [
-           [AddChannel_button, Support_button]
+           [AddChannel_button],[Popup_button, Dm_button]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         message = f"""
-Welcome to @Wh_SafeguardUXRobot
+☝️ Select which view you would like to use 👁️
 
-• Your cut is 70% unless we agreed on a different cut!
-• Logs are sent privately to you
+Please pick an option using the buttons below
 
-💡Desktop Users: If the Add Bot button doesn't work, manually
-add @Wh_SafeguardUXRobot to your group as admin.
+📂 Open instantly - Set it up so that the web app sends without the
+ user having to message the bot
+💬 Open in DMs - Set it up so that the user has to message the bot to get the web app
 """     
         bio = BytesIO()
         BackgroundGuard_Image.save(bio, format="JPEG")
         bio.seek(0)
         await query.message.reply_photo(photo=bio, caption=message, reply_markup=reply_markup)
-    
+    elif callback_data == "Dm_button":
+        Channel_info = handle_channel_addition(update, context)
+        print("Channel_info",Channel_info)
+        if Channel_info:
+         message = f"""
+✅ Successfully sent message in portal
+
+🔎 Portal Details
+├ 🏷️ Name: {Channel_info['channel_name']}
+├ 🪪 ID: {Channel_info['ID']}
+├ 💬 Type: {Channel_info['Type']}        
+"""
+         await query.message.reply_text(message)
+        else:
+            await query.message.reply_text("Could not retrieve channel information.")
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     user_id = user.id
-    username = user.username or "Unknown"
     is_subscribed = await is_user_subscribed(user_id, context)
     print("hh----->", is_subscribed)
     if not is_subscribed:
@@ -121,11 +159,14 @@ receive a 70% split of the money you make from each
 portal""", 
         reply_markup=reply_markup)
 
-if __name__=='__main__':
+def main():
     application  = ApplicationBuilder().token(TOKEN).build()
-
+    
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CallbackQueryHandler(clickHandler))
+    
+    application.add_handler(ChatMemberHandler(handle_channel_addition, ChatMemberHandler.MY_CHAT_MEMBER))
+    application.run_polling(drop_pending_updates=True)
 
-    application.run_polling()
-
+if __name__ == '__main__':
+    main() 
