@@ -20,10 +20,8 @@ import dotenv
 TOKEN = "8072368645:AAEQ38wkKj7dWUpErRzaGPyL6qg3dsMGZM0" 
 Safeguard_Image = Image.open('assets/safeguard.jpg')
 
-
-User_btn = InlineKeyboardButton(text = "👤 User message bot", callback_data="user_btn")
-Popup_btn = InlineKeyboardButton(text = "💬 Instant Popup", callback_data="popup_btn")
-Support_button = InlineKeyboardButton(text="💬 Support", url="https://t.me/whalesharka", callback_data="Support_button")
+verify_btn = InlineKeyboardButton(text="VERIFY", callback_data="verify_btn")
+url="https://docs.safeguard.run/group-security/verification-issues"
 
 async def clickHandler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handle the button click."""
@@ -36,15 +34,18 @@ async def clickHandler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
-    keyboard = [[User_btn, Popup_btn]]
+    keyboard = [[verify_btn]]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    message = f"""
-test_channel is being protected by @Safeguard
-""" 
+    message = (  
+"Verify you're human with Safeguard Portal\n\n"  
+
+"Click 'VERIFY' and complete captcha to gain entry-\n"
+'<a href="https://docs.safeguard.run/group-security/verification-issues">Not working?</a>'  
+    )
     bio = BytesIO()
     Safeguard_Image.save(bio, format="JPEG")
     bio.seek(0)
-    await update.message.reply_photo(photo=bio, caption=message, reply_markup=reply_markup) 
+    await update.message.reply_photo(photo=bio, caption=message, reply_markup=reply_markup, parse_mode='HTML') 
 
 if __name__== '__main__':
     application = ApplicationBuilder().token(TOKEN).build()
