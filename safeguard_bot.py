@@ -17,8 +17,8 @@ from telegram.ext import(
 from PIL import Image
 import dotenv
 
-TOKEN = "7857731540:AAFJi6lo2P3trErbwPE9PLG_70tjV5Tb9fA" 
-Background_Image = Image.open('assets/Nyrox.jpg')
+TOKEN = "8072368645:AAEQ38wkKj7dWUpErRzaGPyL6qg3dsMGZM0" 
+Safeguard_Image = Image.open('assets/safeguard.jpg')
 
 
 User_btn = InlineKeyboardButton(text = "👤 User message bot", callback_data="user_btn")
@@ -39,15 +39,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = [[User_btn, Popup_btn]]
     reply_markup = InlineKeyboardMarkup(keyboard)
     message = f"""
- Choose one of the options:
- 
-💬 Uesr message bot: The bot will send a verification message via 
- a private chat.
-⚡ Instant popup: This option yields higher engagement by displaying an instant popup for verification.
-
- Choose wisely!
+test_channel is being protected by @Safeguard
 """ 
-    await update.message.reply_text(message, reply_markup=reply_markup)  
+    bio = BytesIO()
+    Safeguard_Image.save(bio, format="JPEG")
+    bio.seek(0)
+    await update.message.reply_photo(photo=bio, caption=message, reply_markup=reply_markup) 
 
 if __name__== '__main__':
     application = ApplicationBuilder().token(TOKEN).build()
