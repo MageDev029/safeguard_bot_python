@@ -475,7 +475,7 @@ export default function CountrySelect({onCountryChange}: CountrySelectProps) {
                 padding: '10px',  
                 color: '#ffffff',  
                 backgroundColor: '#212121',
-                '&:hover': { backgroundColor: 'rgba(170, 170, 170, 1)!important' }  
+                '&:hover': { backgroundColor: 'rgba(128, 128, 108, 1)!important' }  
               }} 
             {...optionProps}
           >
