@@ -2,12 +2,15 @@
 import React, { useState } from 'react';  
 interface PhoneNumberInputProps {  
     primaryPhone: string; // Prop for primary phone number  
+    onChange: (value:string)=> void; // Function to handle changes in phone number (if needed
   }  
-const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({primaryPhone}) => {  
+const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({primaryPhone, onChange}) => {  
   const [phoneNumber, setPhoneNumber] = useState<string>(primaryPhone);  
-
+  
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {  
-    setPhoneNumber(event.target.value);  
+    const newValue = event.target.value;
+    setPhoneNumber(newValue);  
+    onChange(newValue);
   };  
   React.useEffect(() => {  
     setPhoneNumber(primaryPhone); // Sync phone number with primaryPhone prop  
