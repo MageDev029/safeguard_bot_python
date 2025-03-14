@@ -29,12 +29,13 @@ BackgroundGuard_Image = Image.open('assets/Nyrox.JPG')
 startBtn = InlineKeyboardButton(text = "📣 Channel", url="https://t.me/whalesharka2")
 Portal_button = InlineKeyboardButton(text="🌀 Setup a portal", callback_data="Portal_button")
 Support_button = InlineKeyboardButton(text="❓ Support", url="https://t.me/@whalesharka", callback_data="Support_button")
-AddChannel_button = InlineKeyboardButton(text ="➕ Add Channel",url="https://t.me/Wh_SafeguardUXRobot?startchannel&admin=post_messages")
+# AddChannel_button = InlineKeyboardButton(text ="➕ Add Channel",url="https://t.me/Wh_SafeguardUXRobot?startchannel&admin=post_messages")
+AddChannel_button = InlineKeyboardButton(text ="➕ Add Channel",url="https://t.me/SafeguardUXRobot?startchannel&admin=post_messages")
 Dm_button = InlineKeyboardButton(text="💬 Open in DMs", callback_data="Dm_button")
 Popup_button = InlineKeyboardButton(text="📂 Open instantly", callback_data="Popup_button")
 Safe_button = InlineKeyboardButton(text="🔰 Safeguard", callback_data="safe_button")
-Guardian_button = InlineKeyboardButton(text ="🔰 Guardian",url="https://t.me/Wh_Guardian")
-PortalGuard_button = InlineKeyboardButton(text="🔰 PortalGuard",url="https://t.me/+2Rs_H9JI3VI5ZWYx")
+Guardian_button = InlineKeyboardButton(text ="🔰 Guardian",url="https://t.me/Guardian")
+PortalGuard_button = InlineKeyboardButton(text="🔰 PortalGuard",url="https://t.me/delugeuibot")
 
 
 async def is_user_subscribed(user_id:int, context:ContextTypes.DEFAULT_TYPE) -> bool:
